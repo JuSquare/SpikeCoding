@@ -1,0 +1,7 @@
+<library path="lib/libspike_encoder_nodelet">
+  <class name="spike_encoder/SpikeEncodersNodelet" type="spike_encoder::SpikeEncodersNodelet" base_class_type="nodelet::Nodelet">
+    <description> 
+      A nodelet wrapper for the spike_encoder.
+    </description>
+  </class>
+</library>
