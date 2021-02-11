@@ -1,8 +1,7 @@
 # SpikeCoding
 
 
-Install ROS Noetic (for Ubuntu Focal 20.04 LTS) using the following tutorial: 
-http://wiki.ros.org/noetic/Installation/Ubuntu 
+Install ROS Noetic (for Ubuntu Focal 20.04 LTS) using the following tutorial: <br>http://wiki.ros.org/noetic/Installation/Ubuntu 
 
 Install *catkin* python tools: 
 
