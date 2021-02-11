@@ -1,3 +1,4 @@
+%% The 1-D signals for testing
 
 tMax = 1;
 dt = 0.01;
@@ -7,15 +8,17 @@ S1 = 2*sin(2*pi*T) - 0.5*cos(6*pi*T) + 0.75*sin(10*pi*T);
 S2 = -1*sin(2*pi*T) + 0.75*sin(2*pi*T) - 0.05*rand(1,length(T));
 S3 = normpdf(T,0.2,0.1) + 0.5*normpdf(T,0.75,0.1) - 0.1*rand(1,length(T));
 
-factor = 1.05;
+%% Comparing TBR, SF and MW
+
+factor = 1.005;
 [spikes_TBR_1, threshold] = TemporalContrastEncode(S1,factor);
-signal_TBR_1 = TemporalContrastDecode(spikes_TBR_1, threshold);
-factor = 1;
+signal_TBR_1 = 2*TemporalContrastDecode(spikes_TBR_1, threshold);
+factor = 1.005;
 [spikes_TBR_2, threshold] = TemporalContrastEncode(S2,factor);
-signal_TBR_2 = TemporalContrastDecode(spikes_TBR_2, threshold);
-factor = 0.95;
+signal_TBR_2 = 2*TemporalContrastDecode(spikes_TBR_2, threshold);
+factor = 1.005;
 [spikes_TBR_3, threshold] = TemporalContrastEncode(S3,factor);
-signal_TBR_3 = TemporalContrastDecode(spikes_TBR_3, threshold);
+signal_TBR_3 = 2*TemporalContrastDecode(spikes_TBR_3, threshold);
 
 subplot(9,3,[1,4])
 hold on;
@@ -130,3 +133,139 @@ subplot(9,3,27)
 stem(T,spikes_MW_3)
 box on;
 
+%% Comparing HSA, HSA modified and BSA
+
+W = 12;
+fir = triang(W)';
+[spikes_HSA_1, shift] = HoughSpikeEncoding(S1, fir);
+signal_HSA_1 = BenSpikeDecoding(spikes_HSA_1, fir, shift);
+W = 15;
+fir = normpdf(1:W,0,5)';
+[spikes_HSA_2, shift] = HoughSpikeEncoding(S2, fir);
+signal_HSA_2 = BenSpikeDecoding(spikes_HSA_2, fir, shift);
+W = 12;
+fir = triang(W)';
+[spikes_HSA_3, shift] = HoughSpikeEncoding(S3, fir);
+signal_HSA_3 = BenSpikeDecoding(spikes_HSA_3, fir, shift);
+
+subplot(9,3,[1,4])
+hold on;
+plot(T,S1)
+plot(T,signal_HSA_1)
+hold off;
+box on;
+subplot(9,3,7)
+stem(T,spikes_HSA_1)
+box on;
+
+subplot(9,3,[10,13])
+hold on;
+plot(T,S2)
+plot(T,signal_HSA_2)
+hold off;
+box on;
+subplot(9,3,16)
+stem(T,spikes_HSA_2)
+box on;
+
+subplot(9,3,[19,22])
+hold on;
+plot(T,S3)
+plot(T,signal_HSA_3)
+hold off;
+box on;
+subplot(9,3,25)
+stem(T,spikes_HSA_3)
+box on;
+
+W = 12;
+fir = triang(W)';
+threshold = 0.85;
+[spikes_HSAm_1, shift] = HoughSpikeModifiedEncoding(S1, fir, threshold);
+signal_HSAm_1 = BenSpikeDecoding(spikes_HSAm_1, fir, shift);
+W = 15;
+fir = normpdf(1:W,0,5)';
+threshold = 0.05;
+[spikes_HSAm_2, shift] = HoughSpikeModifiedEncoding(S2, fir, threshold);
+signal_HSAm_2 = BenSpikeDecoding(spikes_HSAm_2, fir, shift);
+W = 12;
+fir = triang(W)';
+threshold = 0.5;
+[spikes_HSAm_3, shift] = HoughSpikeModifiedEncoding(S3, fir, threshold);
+signal_HSAm_3 = BenSpikeDecoding(spikes_HSAm_3, fir, shift);
+
+subplot(9,3,[2,5])
+hold on;
+plot(T,S1)
+plot(T,signal_HSAm_1)
+hold off;
+box on;
+subplot(9,3,8)
+stem(T,spikes_HSAm_1)
+box on;
+
+subplot(9,3,[11,14])
+hold on;
+plot(T,S2)
+plot(T,signal_HSAm_2)
+hold off;
+box on;
+subplot(9,3,17)
+stem(T,spikes_HSAm_2)
+box on;
+
+subplot(9,3,[20,23])
+hold on;
+plot(T,S3)
+plot(T,signal_HSAm_3)
+hold off;
+box on;
+subplot(9,3,26)
+stem(T,spikes_HSAm_3)
+box on;
+
+W = 9;
+fir = triang(W)';
+threshold = 1.175;
+[spikes_BSA_1, shift] = BenSpikeEncoding(S1, fir, threshold);
+signal_BSA_1 = BenSpikeDecoding(spikes_BSA_1, fir, shift);
+W = 10;
+fir = normpdf(1:W,1.5,3.5)';
+threshold = 1.05;
+[spikes_BSA_2, shift] = BenSpikeEncoding(S2, fir, threshold);
+signal_BSA_2 = BenSpikeDecoding(spikes_BSA_2, fir, shift);
+W = 8;
+fir = triang(W)';
+threshold = 1.2;
+[spikes_BSA_3, shift] = BenSpikeEncoding(S3, fir, threshold);
+signal_BSA_3 = BenSpikeDecoding(spikes_BSA_3, fir, shift);
+
+subplot(9,3,[3,6])
+hold on;
+plot(T,S1)
+plot(T,signal_BSA_1)
+hold off;
+box on;
+subplot(9,3,9)
+stem(T,spikes_BSA_1)
+box on;
+
+subplot(9,3,[12,15])
+hold on;
+plot(T,S2)
+plot(T,signal_BSA_2)
+hold off;
+box on;
+subplot(9,3,18)
+stem(T,spikes_BSA_2)
+box on;
+
+subplot(9,3,[21,24])
+hold on;
+plot(T,S3)
+plot(T,signal_BSA_3)
+hold off;
+box on;
+subplot(9,3,27)
+stem(T,spikes_BSA_3)
+box on;
