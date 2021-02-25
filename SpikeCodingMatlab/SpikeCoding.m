@@ -269,3 +269,86 @@ box on;
 subplot(9,3,27)
 stem(T,spikes_BSA_3)
 box on;
+
+%% Plot Gaussians
+
+% figure()
+% x = -5:0.001:7.5;
+% Nj = 10;
+% 
+% sgtitle('Gaussian receptive fields');
+% hold on;
+% for j = 1:Nj
+%     signal = input(j*10);
+%     for i = 1:m
+%        mu = min_input + (2*i-3)/2*(max_input - min_input)/(m-2);
+%        % Bohté et al. 2002: 
+%        % sigma = (m-2) / (beta * (max_input - min_input));
+%        % Modified version: 
+%        sigma = (max_input - min_input)/(m-2);
+%        plot(x, normpdf(x, mu, sigma)/normpdf(mu, mu, sigma));
+%        plot(signal, normpdf(signal, mu, sigma)/normpdf(mu, mu, sigma), 'ob');
+%        xline(signal,'--r');
+%        xline(min_input, 'black', 'linewidth', 1.5);
+%        xline(max_input, 'black', 'linewidth', 1.5);
+%     end
+% end
+% box on;
+% axis([min_input-3*sigma max_input+3*sigma 0 1]);
+
+
+%% Comparing GFR (Linear), GFR (Gaussian), and Bohté et al. (2002)
+
+m = 15;
+[spikes_GFR_1,min_input,max_input] = GaussianReceptFieldsEncoding(S1,m);
+signal_GFR_1 = GaussianReceptFieldsDecoding(spikes_GFR_1,min_input,max_input);
+[spikes_GFR_2,min_input,max_input] = GaussianReceptFieldsEncoding(S2,m);
+signal_GFR_2 = GaussianReceptFieldsDecoding(spikes_GFR_2,min_input,max_input);
+[spikes_GFR_3,min_input,max_input] = GaussianReceptFieldsEncoding(S3,m);
+signal_GFR_3 = GaussianReceptFieldsDecoding(spikes_GFR_3,min_input,max_input);
+
+subplot(9,3,[1,4])
+hold on;
+plot(T,S1)
+plot(T,signal_GFR_1)
+hold off;
+box on;
+subplot(9,3,7)
+hold  all;
+for  t = 1:length(T)
+    [~,neuron] = max(spikes_GFR_1(t,:));
+    plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
+end
+hold off;
+box on;
+
+subplot(9,3,[10,13])
+hold on;
+plot(T,S2)
+plot(T,signal_GFR_2)
+hold off;
+box on;
+subplot(9,3,16)
+hold  all;
+for  t = 1:length(T)
+    [~,neuron] = max(spikes_GFR_2(t,:));
+    plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
+end
+hold off;
+box on;
+
+subplot(9,3,[19,22])
+hold on;
+plot(T,S3)
+plot(T,signal_GFR_3)
+hold off;
+box on;
+subplot(9,3,25)
+hold  all;
+for  t = 1:length(T)
+    [~,neuron] = max(spikes_GFR_3(t,:));
+    plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
+end
+hold off;
+box on;
+
