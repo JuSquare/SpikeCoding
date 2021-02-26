@@ -10,7 +10,8 @@ Install *catkin* python tools:
 Install additionnal dependencies:
 
 	sudo apt install python3-catkin-lint python3-pip
-	pip3 install osrf-pycommon
+	python -m pip install osrf-pycommon
+	python -m pip install empy
 
 Then create your workspace:
 
