@@ -15,8 +15,8 @@ Install additionnal dependencies:
 Then create your workspace:
 
 	cd~ 
-	mkdir -p /catkin_ws/src
-	cd /catkin/src
+	mkdir -p catkin_ws/src
+	cd catkin_ws/src
 	git clone https://github.com/catkin/catkin_simple.git
 	cd ..
 	catkin_make
@@ -24,6 +24,6 @@ Then create your workspace:
 
 Download this repository, and copy the *spike_encoder* package to your `~/catkin_ws/src/` folder. Then compile your project: 
 
-	cd /catkin/
+	cd /catkin_ws/
 	catkin_make
 	source ~/catkin_ws/devel/setup.bash
