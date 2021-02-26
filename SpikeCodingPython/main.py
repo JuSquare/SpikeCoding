@@ -131,3 +131,24 @@ if __name__ == '__main__':
         plt.gca().axes.get_yaxis().set_visible(False)
         
     plt.show()
+
+
+    for i in range(len(S)):
+
+        number_of_neurons = 15
+        spikes_GRF_1, min_input, max_input = ES.grf_spike(S[i], number_of_neurons)
+        signal_GRF_1 = DS.grf_spike(spikes_GRF_1, min_input, max_input)
+
+        plt.subplot(3*len(S),3,(1+i*3*len(S),4+i*3*len(S)))
+        plt.plot(time, S[i])
+        plt.plot(time, signal_GRF_1)
+        plt.gca().axes.get_xaxis().set_visible(False)
+        plt.gca().axes.get_yaxis().set_visible(False)
+
+        plt.subplot(3*len(S),3,7+i*3*len(S))
+        for k in range(len(S[i])):
+            plt.plot([time[k], time[k]], [np.argmax(spikes_GRF_1[k,:])-0.35, np.argmax(spikes_GRF_1[k,:])+0.35])
+        plt.gca().axes.get_xaxis().set_visible(False)
+        plt.gca().axes.get_yaxis().set_visible(False)
+
+    plt.show()

@@ -52,3 +52,10 @@ def ben_spike(spikes, fir, shift):
     signal = signal + shift*np.ones(len(signal))
     signal = signal[0:(len(signal)-len(fir)+1)]
     return signal
+
+def grf_spike(spikes, min_input, max_input):
+    shape = spikes.shape
+    signal = np.zeros(shape[0])
+    for i in range(shape[0]):
+        signal[i] = min_input + (2*np.argmax(spikes[i,:])-3)/2*(max_input - min_input)/(shape[1]-2)
+    return signal
