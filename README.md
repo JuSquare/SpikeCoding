@@ -6,6 +6,11 @@ Install ROS Noetic (for Ubuntu Focal 20.04 LTS) using the following tutorial: <b
 Install *catkin* python tools: 
 
 	sudo apt-get install python3-catkin-tools 
+	
+Install additionnal dependencies:
+
+	sudo apt install python3-catkin-lint python3-pip
+	pip3 install osrf-pycommon
 
 Then create your workspace:
 
