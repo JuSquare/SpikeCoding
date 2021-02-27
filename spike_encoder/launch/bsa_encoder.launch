@@ -1,5 +1,0 @@
-<launch>
-  <node name="spike_encoder" pkg="spike_encoder" type="spike_encoder">
-
-  </node>
-</launch>

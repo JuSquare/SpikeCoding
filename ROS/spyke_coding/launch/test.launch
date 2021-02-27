@@ -1,0 +1,3 @@
+<launch>
+  <node name="spikes_publisher" pkg="spyke_coding" type="generate_spikes.py"></node>
+</launch>

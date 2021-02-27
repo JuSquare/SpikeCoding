@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>spyke_coding_schemes</name>
+  <version>0.0.0</version>
+  <description>The spyke_coding_schemes package</description>
+  <maintainer email="j.j.g.dupeyroux@tudelft.nl">Julien Dupeyroux</maintainer>
+  <license>MIT</license>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>rospy</exec_depend>
+
+  <export></export>
+</package>
