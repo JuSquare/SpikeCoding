@@ -4,17 +4,14 @@ from scipy.stats import norm
 
 
 def noisy_sine_wave(a, f, phi, sigma, time):
-    signal = np.zeros(len(time))
-    for i in range(len(time)):
-        signal[i] = a*math.sin(2*math.pi*f*time[i] + phi) + np.random.rand(1)*sigma
-    return signal
+    mySin  = np.vectorize(math.sin)
+    return a*mySin(2*math.pi*f*time + phi*np.ones(len(time))) + np.random.rand(len(time))*sigma
 
 
 def sum_of_sine_waves(a, f, phi, sigma, time):
     signal = np.zeros(len(time))
-    for i in range(len(time)):
-        for j in range(len(a)):
-            signal[i] = signal[i] + a[j]*math.sin(2*math.pi*f[j]*time[i] + phi[j]) + np.random.rand(1)*sigma
+    for j in range(len(a)):
+        signal = signal + noisy_sine_wave(a[j], f[j], phi[j], sigma, time)
     return signal
 
 
@@ -24,12 +21,6 @@ def noisy_gaussian_wave(a, m, s, sigma, time):
 
 def sum_of_gaussian_wave(a, m, s, sigma, time):
     signal = np.zeros(len(time))
-    normFunctions = list()
-    
     for j in range(len(a)):
-        normFunctions.append(noisy_gaussian_wave(a[j], m[j], s[j], 0, time))
-    
-    for i in range(len(time)):
-        for j in range(len(a)):
-            signal[i] = signal[i] + normFunctions[j][i] + np.random.rand(1)*sigma
+        signal = signal + noisy_gaussian_wave(a[j], m[j], s[j], 0, time) + np.random.rand(len(time))*sigma
     return signal

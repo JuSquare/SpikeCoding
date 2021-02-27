@@ -1,23 +1,19 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>spyke_coding</name>
+  <name>spyke_msgs</name>
   <version>0.0.0</version>
-  <description>The spyke_coding package</description>
-
+  <description>The spyke_msgs package</description>
   <maintainer email="j.j.g.dupeyroux@tudelft.nl">Julien Dupeyroux</maintainer>
-
   <license>MIT</license>
-
+  
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>rospy</build_depend>
-  <build_depend>spyke_msgs</build_depend>
   <build_depend>std_msgs</build_depend>
+  <build_depend>message_generation</build_depend>
 
-  <exec_depend>rospy</exec_depend>
-  <exec_depend>spyke_msgs</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
   <exec_depend>std_msgs</exec_depend>
+  <exec_depend>message_generation</exec_depend>
 
   <export></export>
-
 </package>

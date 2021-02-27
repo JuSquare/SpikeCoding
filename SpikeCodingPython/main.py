@@ -10,7 +10,8 @@ import FunctionGenerator as FG
 
 if __name__ == '__main__':
     dt = 0.01
-    time = np.arange(0, 1, dt)
+    T_max = 4
+    time = np.arange(0, T_max, dt)
 
     S = list()
     S.append(FG.sum_of_sine_waves([2, -0.5, 0.75], [1.0, 3.0, 5.0], [0.0, 0.0, 0.0], 0.0, time))
