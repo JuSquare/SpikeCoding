@@ -26,7 +26,7 @@ if __name__ == '__main__':
     print(bag)
 
     for topic, msg, t in bag.read_messages(topics=['event']):
-        events.append(int(msg.spike))
+        events.append(msg.spike)
         time.append((msg.timestamp.to_nsec() / (1e-9)))
         signal.append(float(msg.input))
         threshold.append(float(msg.threshold))
@@ -40,9 +40,10 @@ if __name__ == '__main__':
             max_input = float(msg.max_input)
 
     bag.close()
+    events = np.array(events)
 
     if coding == "temporal_contrast":
-        reconstructed_signal = DS.temporal_contrast(events, np.mean(threshold))
+        reconstructed_signal = 2*DS.temporal_contrast(events, np.mean(threshold))
     elif coding == "step_forward":
         reconstructed_signal = DS.step_forward(events, np.mean(threshold), startpoint)
     elif coding == "moving_window":
@@ -55,10 +56,19 @@ if __name__ == '__main__':
     else:
         sys.exit("Encoding scheme not recognized!")
 
+    
+    
     plt.subplot(3,1,(1,2))
     plt.plot(signal)
     plt.plot(reconstructed_signal)
+    plt.title(coding)
+    plt.legend(["Original signal", "Reconstructed signal"])
     plt.subplot(3,1,3)
-    plt.stem(events)
+    if coding == "gaussian_fields":
+        for i in range(len(events)):
+            plt.plot([i, i], [np.argmax(events[i,:])-0.35, np.argmax(events[i,:])+0.35])
+    else: 
+        plt.stem(events)
+    plt.xlabel("Timestamps")
 
     plt.show()

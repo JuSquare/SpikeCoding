@@ -137,7 +137,8 @@ if __name__ == '__main__':
     for i in range(len(S)):
 
         number_of_neurons = 15
-        spikes_GRF_1, min_input, max_input = ES.grf_spike(S[i], number_of_neurons)
+        [min_input, max_input] = [min(S[i]), max(S[i])]
+        spikes_GRF_1 = ES.grf_spike(S[i], number_of_neurons, min_input, max_input)
         signal_GRF_1 = DS.grf_spike(spikes_GRF_1, min_input, max_input)
 
         plt.subplot(3*len(S),3,(1+i*3*len(S),4+i*3*len(S)))

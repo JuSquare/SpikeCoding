@@ -1,0 +1,10 @@
+<launch>
+    <node name="spikes_publisher" pkg="spyke_coding" type="generate_spikes.py"></node>
+    <param name="dt" value="0.01" />
+    <param name="T_max" value="5" />
+    <param name="factor" value="0.0" />
+    <param name="threshold" value="0.0" />
+    <param name="window" value="0" />
+    <param name="neurons" value="0" />
+    <param name="encoding_scheme" value="hsa" />
+</launch>

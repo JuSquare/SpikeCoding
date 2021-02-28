@@ -118,19 +118,26 @@ def ben_spike(data, fir, threshold):
     return spikes, shift
 
 
-def grf_spike(data, m):
+def grf_spike(data, m, min_input, max_input):
     # Adapted from algorithm provided in:
     #   Bohté et al. (2002)
     # Modifications: definition of sigma, removal of beta constant,
     #                and modified WTA process
-    spikes = np.zeros((len(data),m))
-    neuron_outputs = np.zeros(m)
-    max_input = max(data)
-    min_input = min(data)
-    for j in range(len(data)):
+    if np.isscalar(data):
+        spikes = np.zeros(m)
+        neuron_outputs = np.zeros(m)
         for i in range(m):
             mu = min_input + (2*i-3)/2*(max_input - min_input)/(m-2)
             sigma = (max_input - min_input)/(m-2)
-            neuron_outputs[i] = norm.pdf(data[j], mu, sigma)
-        spikes[j,np.argmax(neuron_outputs)] = 1
-    return spikes, min_input, max_input
+            neuron_outputs[i] = norm.pdf(data, mu, sigma)
+        spikes[np.argmax(neuron_outputs)] = 1
+    else: 
+        spikes = np.zeros((len(data),m))
+        neuron_outputs = np.zeros(m)
+        for j in range(len(data)):
+            for i in range(m):
+                mu = min_input + (2*i-3)/2*(max_input - min_input)/(m-2)
+                sigma = (max_input - min_input)/(m-2)
+                neuron_outputs[i] = norm.pdf(data[j], mu, sigma)
+            spikes[j,np.argmax(neuron_outputs)] = 1
+    return spikes
