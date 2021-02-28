@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
     S = list()
     S.append(FG.sum_of_sine_waves([2, -0.5, 0.75], [1.0, 3.0, 5.0], [0.0, 0.0, 0.0], 0.0, time))
-    S.append(FG.sum_of_sine_waves([-1, 0.75], [1.0, 1.0], [0.0, 0.0], 0.05, time))
+    S.append(FG.sum_of_sine_waves([-0.25], [1.0], [0.0], 0.05, time))
     S.append(FG.sum_of_gaussian_wave([1, 0.5], [0.2, 0.75], [0.1, 0.1], 0.1, time))
 
     tbr_factors = [1.005, 1.005, 1.005]
@@ -69,6 +69,8 @@ if __name__ == '__main__':
         plt.plot(time, signal_TBR)
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
+        if i == 0:
+            plt.title("Temporal Contrast Algorithm TBR")
 
         plt.subplot(3*len(S),3,7+i*3*len(S))
         plt.stem(time, spikes_TBR)
@@ -80,6 +82,8 @@ if __name__ == '__main__':
         plt.plot(time, signal_SF)
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
+        if i == 0:
+            plt.title("Step Forward Algorithm SF")
 
         plt.subplot(3*len(S),3,8+i*3*len(S))
         plt.stem(time, spikes_SF)
@@ -91,6 +95,8 @@ if __name__ == '__main__':
         plt.plot(time, signal_MW)
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
+        if i == 0:
+            plt.title("Moving Window Algorithm MW")
 
         plt.subplot(3*len(S),3,9+i*3*len(S))
         plt.stem(time, spikes_MW)
@@ -131,6 +137,8 @@ if __name__ == '__main__':
         plt.plot(time, signal_HSA)
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
+        if i == 0:
+            plt.title("Hough Spike Algorithm HSA")
 
         plt.subplot(3*len(S),3,7+i*3*len(S))
         plt.stem(time, spikes_HSA)
@@ -142,6 +150,8 @@ if __name__ == '__main__':
         plt.plot(time, signal_HSAm)
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
+        if i == 0:
+            plt.title("Threshold Hough Spike Algorithm T-HSA")
 
         plt.subplot(3*len(S),3,8+i*3*len(S))
         plt.stem(time, spikes_HSAm)
@@ -153,6 +163,8 @@ if __name__ == '__main__':
         plt.plot(time, signal_BSA)
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
+        if i == 0:
+            plt.title("Ben Spike Algorithm BSA")
 
         plt.subplot(3*len(S),3,9+i*3*len(S))
         plt.stem(time, spikes_BSA)
@@ -174,6 +186,8 @@ if __name__ == '__main__':
         plt.plot(time, signal_GRF_1)
         plt.gca().axes.get_xaxis().set_visible(False)
         plt.gca().axes.get_yaxis().set_visible(False)
+        if i == 0:
+            plt.title("Gaussian Receptive Fields GRF")
 
         plt.subplot(3*len(S),3,7+i*3*len(S))
         for k in range(len(S[i])):

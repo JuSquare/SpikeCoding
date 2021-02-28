@@ -31,10 +31,12 @@ dt = 0.01;
 T = dt:dt:tMax;
 
 S1 = 2*sin(2*pi*T) - 0.5*cos(6*pi*T) + 0.75*sin(10*pi*T);
-S2 = -1*sin(2*pi*T) + 0.75*sin(2*pi*T) - 0.05*rand(1,length(T));
+S2 = -0.25*sin(2*pi*T) - 0.05*rand(1,length(T));
 S3 = normpdf(T,0.2,0.1) + 0.5*normpdf(T,0.75,0.1) - 0.1*rand(1,length(T));
 
 %% Comparing TBR, SF and MW
+
+figure()
 
 factor = 1.005;
 [spikes_TBR_1, threshold] = TemporalContrastEncode(S1,factor);
@@ -51,6 +53,7 @@ hold on;
 plot(T,S1)
 plot(T,signal_TBR_1)
 hold off;
+title('Temporal Contrast Algorithm TBR');
 box on;
 subplot(9,3,7)
 stem(T,spikes_TBR_1)
@@ -91,6 +94,7 @@ hold on;
 plot(T,S1)
 plot(T,signal_SF_1)
 hold off;
+title('Step Forward Algorithm SF');
 box on;
 subplot(9,3,8)
 stem(T,spikes_SF_1)
@@ -134,6 +138,7 @@ hold on;
 plot(T,S1)
 plot(T,signal_MW_1)
 hold off;
+title('Moving Window Algorithm MW');
 box on;
 subplot(9,3,9)
 stem(T,spikes_MW_1)
@@ -161,6 +166,8 @@ box on;
 
 %% Comparing HSA, HSA modified and BSA
 
+figure()
+
 W = 12;
 fir = triang(W)';
 [spikes_HSA_1, shift] = HoughSpikeEncoding(S1, fir);
@@ -179,6 +186,7 @@ hold on;
 plot(T,S1)
 plot(T,signal_HSA_1)
 hold off;
+title('Hough Spike Algorithm HSA');
 box on;
 subplot(9,3,7)
 stem(T,spikes_HSA_1)
@@ -225,6 +233,7 @@ hold on;
 plot(T,S1)
 plot(T,signal_HSAm_1)
 hold off;
+title('Threshold Hough Spike Algorithm T-HSA');
 box on;
 subplot(9,3,8)
 stem(T,spikes_HSAm_1)
@@ -271,6 +280,7 @@ hold on;
 plot(T,S1)
 plot(T,signal_BSA_1)
 hold off;
+title('Ben Spike Algorithm BSA');
 box on;
 subplot(9,3,9)
 stem(T,spikes_BSA_1)
@@ -325,6 +335,8 @@ box on;
 
 %% Comparing GFR (Linear), GFR (Gaussian), and Bohté et al. (2002)
 
+figure()
+
 m = 15;
 [spikes_GFR_1,min_input,max_input] = GaussianReceptFieldsEncoding(S1,m);
 signal_GFR_1 = GaussianReceptFieldsDecoding(spikes_GFR_1,min_input,max_input);
@@ -338,6 +350,7 @@ hold on;
 plot(T,S1)
 plot(T,signal_GFR_1)
 hold off;
+title('Gaussian Receptive Fields GRF');
 box on;
 subplot(9,3,7)
 hold  all;
