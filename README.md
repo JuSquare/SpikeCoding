@@ -14,6 +14,14 @@ This package features MATLAB, Python and ROS implementations of spike encoding a
 
 Supporting paper: https://arxiv.org/abs/2103.XXXX
 
+TODOs: 
+- Finish integration of rate coding to ROS node
+- Implement the following schemes: non-linear GRF, ROC, Poisson, LPC.
+- Upload review table & add references on README
+- Generate tests for MNIST dataset
+- Generate tests for IMU data from the Obstacle Detection & Avoidance Dataset
+- ...
+
 ---
 
 *This work is part of the Comp4Drones project and has received funding from the ECSEL Joint Undertaking (JU) under grant agreement No. 826610. The JU receives support from the European Union's Horizon 2020 research and innovation program and Spain, Austria, Belgium, Czech Republic, France, Italy, Latvia, Netherlands.*
@@ -97,11 +105,3 @@ List of the available launch files:
 - `encode_threshold_hough.launch`
 - `encode_bsa.launch`
 - `encode_gaussian_fields.launch`
-
-## References
-
-[1]
-
-[2]
-
-[3]
