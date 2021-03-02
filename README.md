@@ -20,6 +20,7 @@ TODOs:
 - Upload review table & add references on README
 - Generate tests for MNIST dataset
 - Generate tests for IMU data from the Obstacle Detection & Avoidance Dataset
+- Setup framework for parameters optimisation (DEAP, PyEvolve, PyBrain)
 - ...
 
 ---
