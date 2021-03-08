@@ -169,3 +169,34 @@ def grf_spike(data, m, min_input, max_input):
                 neuron_outputs[i] = norm.pdf(data[j], mu, sigma)
             spikes[j,np.argmax(neuron_outputs)] = 1
     return spikes
+
+
+def grf_spike_with_internal_timesteps(data, m, n, min_input, max_input):
+    # Adapted from algorithm provided in:
+    #   Bohté et al. (2002)
+    # Modifications: definition of sigma, removal of beta constant,
+    #                and modified WTA process
+
+
+    if np.isscalar(data):
+        data = [data]
+    spikes = np.zeros((len(data), n, m))
+    responses = np.zeros(m)
+    mu = np.zeros(m)
+
+    # Calculation of mu and sigma of the Gaussian receptive fields (note that beta value could be introduced)
+    for i in range(m):
+        mu[i] = min_input + (2*(i+1)-3)/2*(max_input - min_input)/(m-2)
+
+    sigma = 1/1.5*(max_input - min_input)/(m-2)
+    max_prob = norm.pdf(mu[0], mu[0], sigma)
+
+    for j in range(len(data)):
+        for i in range(m):
+            responses[i] = norm.pdf(data[j], mu[i], sigma)
+            spiking_time = n - 1 - np.argmax(np.histogram(responses[i],  np.linspace(0, max_prob, n + 1))[0])
+            if spiking_time < n - 1:
+                spikes[j, spiking_time, i] = 1
+
+    spikes = spikes.reshape([len(data) * n, m])
+    return spikes

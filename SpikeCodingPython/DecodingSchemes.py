@@ -87,3 +87,24 @@ def grf_spike(spikes, min_input, max_input):
     for i in range(shape[0]):
         signal[i] = min_input + (2*(np.argmax(spikes[i,:]) + 1)-3)/2*(max_input - min_input)/(shape[1]-2)
     return signal
+
+
+def grf_spike_with_internal_timesteps(spikes, n, min_input, max_input):
+    shape = spikes.shape
+    spikes = spikes.reshape((int(shape[0]/n), n, shape[1]))
+    signal = np.zeros(len(spikes))
+    mu = np.zeros(shape[1])
+
+    for i in range(shape[1]):
+        mu[i] = min_input + (2*(i + 1)-3)/2*(max_input - min_input)/(shape[1]-2)
+
+    for i in range(len(spikes)):
+        spike_times = np.zeros(shape[1])
+        for j in range(n):
+            for spike_idx in spikes[i, j, :].nonzero():
+                spike_times[spike_idx] = n - j
+
+        weight_center  = np.sum(mu*spike_times)/np.sum(spike_times)
+        signal[i] = weight_center
+
+    return signal
