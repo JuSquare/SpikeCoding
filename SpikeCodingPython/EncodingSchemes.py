@@ -151,21 +151,73 @@ def grf_spike(data, m, min_input, max_input):
     #   Bohté et al. (2002)
     # Modifications: definition of sigma, removal of beta constant,
     #                and modified WTA process
+
     if np.isscalar(data):
-        spikes = np.zeros(m)
-        neuron_outputs = np.zeros(m)
+        data = [data]
+
+    spikes = np.zeros((len(data),m))
+    neuron_outputs = np.zeros(m)
+
+    for j in range(len(data)):
         for i in range(m):
-            mu = min_input + (2*i-3)/2*(max_input - min_input)/(m-2)
+            mu = min_input + (2*(i + 1)-3)/2*(max_input - min_input)/(m-2)
             sigma = (max_input - min_input)/(m-2)
-            neuron_outputs[i] = norm.pdf(data, mu, sigma)
-        spikes[np.argmax(neuron_outputs)] = 1
-    else: 
-        spikes = np.zeros((len(data),m))
-        neuron_outputs = np.zeros(m)
-        for j in range(len(data)):
-            for i in range(m):
-                mu = min_input + (2*i-3)/2*(max_input - min_input)/(m-2)
-                sigma = (max_input - min_input)/(m-2)
-                neuron_outputs[i] = norm.pdf(data[j], mu, sigma)
-            spikes[j,np.argmax(neuron_outputs)] = 1
+            neuron_outputs[i] = norm.pdf(data[j], mu, sigma)
+
+        spikes[j,np.argmax(neuron_outputs)] = 1
+    return spikes
+
+def one_hot_place_spike(data, m, min_input, max_input):
+    # Simple population coding algorithm that represents inputs by a location. 
+    # An input is assigned to the neuron that is closest to its value. 
+    # Only one neuron fires at every timestep
+
+    if np.isscalar(data):
+        data = [data]
+
+    spikes = np.zeros((len(data),m))
+
+    for j in range(len(data)):
+        size_change = 1/2*(max_input - min_input)/(m-2) # to make sure it has the same lower/upper bounds as the Bohte paper
+        idx = int(np.round(((data[j] - (min_input - size_change)) / ((max_input + size_change) - (min_input - size_change))) * (m - 1)))
+        spikes[j, idx] = 1
+    
+    return spikes
+
+
+def grf_spike_with_internal_timesteps(data, min_input, max_input, neurons=10, timesteps=10, beta=1.5):
+    """Create a series of spikes based on Gaussian Receptive Fields
+    Adapted from algorithm provided in:
+        Bohté et al. (2002)
+    
+    Keyword arguments:
+    data -- 
+    neurons -- numbers of neurons (default 10)
+    timesteps -- number of timesteps (default 10)
+    min_input -- minimal value
+    max_input -- maximum value
+    beta -- tuning parameter that determines the width of the receptive fields
+    """
+
+    
+    if np.isscalar(data):
+        data = [data]
+        
+    spikes = np.zeros((len(data), timesteps, neurons))
+    responses = np.zeros(neurons)
+
+    # Calculation of mu and sigma of the Gaussian receptive fields
+    mu = min_input + (2*(np.arange(neurons)+1)-3)/2*(max_input - min_input)/(neurons-2)
+    sigma = 1/beta*(max_input - min_input)/(neurons-2)
+    max_prob = norm.pdf(mu[0], mu[0], sigma)
+
+    for j in range(len(data)):
+        for i in range(neurons):
+            responses[i] = norm.pdf(data[j], mu[i], sigma)
+            size_change = max_prob / (2 * timesteps)
+            new = int(np.round(((responses[i] + size_change) / (max_prob + 2 * size_change) * (timesteps + 1)) + 0.0001)) # 0.0001 for roundoff errors...
+            spiking_time = timesteps - new
+            if spiking_time < timesteps - 1:
+                spikes[j, spiking_time, i] = 1
+    spikes = spikes.reshape([len(data) * timesteps, neurons])
     return spikes
