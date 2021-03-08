@@ -155,7 +155,7 @@ def grf_spike(data, m, min_input, max_input):
         spikes = np.zeros(m)
         neuron_outputs = np.zeros(m)
         for i in range(m):
-            mu = min_input + (2*i-3)/2*(max_input - min_input)/(m-2)
+            mu = min_input + (2*(i + 1)-3)/2*(max_input - min_input)/(m-2)
             sigma = (max_input - min_input)/(m-2)
             neuron_outputs[i] = norm.pdf(data, mu, sigma)
         spikes[np.argmax(neuron_outputs)] = 1
@@ -164,7 +164,7 @@ def grf_spike(data, m, min_input, max_input):
         neuron_outputs = np.zeros(m)
         for j in range(len(data)):
             for i in range(m):
-                mu = min_input + (2*i-3)/2*(max_input - min_input)/(m-2)
+                mu = min_input + (2*(i + 1)-3)/2*(max_input - min_input)/(m-2)
                 sigma = (max_input - min_input)/(m-2)
                 neuron_outputs[i] = norm.pdf(data[j], mu, sigma)
             spikes[j,np.argmax(neuron_outputs)] = 1
