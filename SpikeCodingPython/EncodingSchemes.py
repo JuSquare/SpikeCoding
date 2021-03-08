@@ -185,28 +185,39 @@ def one_hot_place_spike(data, m, min_input, max_input):
     return spikes
 
 
-def grf_spike_with_internal_timesteps(data, m, n, min_input, max_input, beta=1.5):
-    # Adapted from algorithm provided in:
-    #   Bohté et al. (2002)
+def grf_spike_with_internal_timesteps(data, min_input, max_input, neurons=10, timesteps=10, beta=1.5):
+    """Create a series of spikes based on Gaussian Receptive Fields
+    Adapted from algorithm provided in:
+        Bohté et al. (2002)
+    
+    Keyword arguments:
+    data -- 
+    neurons -- numbers of neurons (default 10)
+    timesteps -- number of timesteps (default 10)
+    min_input -- minimal value
+    max_input -- maximum value
+    beta -- tuning parameter that determines the width of the receptive fields
+    """
 
-
+    
     if np.isscalar(data):
         data = [data]
         
-    spikes = np.zeros((len(data), n, m))
-    responses = np.zeros(m)
+    spikes = np.zeros((len(data), timesteps, neurons))
+    responses = np.zeros(neurons)
 
     # Calculation of mu and sigma of the Gaussian receptive fields
-    mu = min_input + (2*(np.arange(m)+1)-3)/2*(max_input - min_input)/(m-2)
-    sigma = 1/beta*(max_input - min_input)/(m-2)
+    mu = min_input + (2*(np.arange(neurons)+1)-3)/2*(max_input - min_input)/(neurons-2)
+    sigma = 1/beta*(max_input - min_input)/(neurons-2)
     max_prob = norm.pdf(mu[0], mu[0], sigma)
 
     for j in range(len(data)):
-        for i in range(m):
+        for i in range(neurons):
             responses[i] = norm.pdf(data[j], mu[i], sigma)
-            spiking_time = n - 1 - np.argmax(np.histogram(responses[i],  np.linspace(0, max_prob, n + 1))[0])
-            if spiking_time < n -  1:
+            size_change = max_prob / (2 * timesteps)
+            new = int(np.round(((responses[i] + size_change) / (max_prob + 2 * size_change) * (timesteps + 1)) + 0.0001)) # 0.0001 for roundoff errors...
+            spiking_time = timesteps - new
+            if spiking_time < timesteps - 1:
                 spikes[j, spiking_time, i] = 1
-
-    spikes = spikes.reshape([len(data) * n, m])
+    spikes = spikes.reshape([len(data) * timesteps, neurons])
     return spikes
