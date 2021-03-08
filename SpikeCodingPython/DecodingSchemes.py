@@ -88,6 +88,12 @@ def grf_spike(spikes, min_input, max_input):
         signal[i] = min_input + (2*(np.argmax(spikes[i,:]) + 1)-3)/2*(max_input - min_input)/(shape[1]-2)
     return signal
 
+def one_hot_place_spike(spikes, min_input, max_input):
+    shape = spikes.shape
+    signal = np.zeros(shape[0])
+    for i in range(shape[0]):
+        signal[i] = min_input + (2*(np.argmax(spikes[i,:]) + 1)-3)/2*(max_input - min_input)/(shape[1]-2)
+    return signal
 
 def grf_spike_with_internal_timesteps(spikes, n, min_input, max_input):
     shape = spikes.shape

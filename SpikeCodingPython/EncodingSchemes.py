@@ -151,51 +151,61 @@ def grf_spike(data, m, min_input, max_input):
     #   Bohté et al. (2002)
     # Modifications: definition of sigma, removal of beta constant,
     #                and modified WTA process
+
     if np.isscalar(data):
-        spikes = np.zeros(m)
-        neuron_outputs = np.zeros(m)
+        data = [data]
+
+    spikes = np.zeros((len(data),m))
+    neuron_outputs = np.zeros(m)
+
+    for j in range(len(data)):
         for i in range(m):
             mu = min_input + (2*(i + 1)-3)/2*(max_input - min_input)/(m-2)
             sigma = (max_input - min_input)/(m-2)
-            neuron_outputs[i] = norm.pdf(data, mu, sigma)
-        spikes[np.argmax(neuron_outputs)] = 1
-    else: 
-        spikes = np.zeros((len(data),m))
-        neuron_outputs = np.zeros(m)
-        for j in range(len(data)):
-            for i in range(m):
-                mu = min_input + (2*(i + 1)-3)/2*(max_input - min_input)/(m-2)
-                sigma = (max_input - min_input)/(m-2)
-                neuron_outputs[i] = norm.pdf(data[j], mu, sigma)
-            spikes[j,np.argmax(neuron_outputs)] = 1
+            neuron_outputs[i] = norm.pdf(data[j], mu, sigma)
+
+        spikes[j,np.argmax(neuron_outputs)] = 1
+    return spikes
+
+def one_hot_place_spike(data, m, min_input, max_input):
+    # Simple population coding algorithm that represents inputs by a location. 
+    # An input is assigned to the neuron that is closest to its value. 
+    # Only one neuron fires at every timestep
+
+    if np.isscalar(data):
+        data = [data]
+
+    spikes = np.zeros((len(data),m))
+
+    for j in range(len(data)):
+        size_change = 1/2*(max_input - min_input)/(m-2) # to make sure it has the same lower/upper bounds as the Bohte paper
+        idx = int(np.round(((data[j] - (min_input - size_change)) / ((max_input + size_change) - (min_input - size_change))) * (m - 1)))
+        spikes[j, idx] = 1
+    
     return spikes
 
 
-def grf_spike_with_internal_timesteps(data, m, n, min_input, max_input):
+def grf_spike_with_internal_timesteps(data, m, n, min_input, max_input, beta=1.5):
     # Adapted from algorithm provided in:
     #   Bohté et al. (2002)
-    # Modifications: definition of sigma, removal of beta constant,
-    #                and modified WTA process
 
 
     if np.isscalar(data):
         data = [data]
+        
     spikes = np.zeros((len(data), n, m))
     responses = np.zeros(m)
-    mu = np.zeros(m)
 
-    # Calculation of mu and sigma of the Gaussian receptive fields (note that beta value could be introduced)
-    for i in range(m):
-        mu[i] = min_input + (2*(i+1)-3)/2*(max_input - min_input)/(m-2)
-
-    sigma = 1/1.5*(max_input - min_input)/(m-2)
+    # Calculation of mu and sigma of the Gaussian receptive fields
+    mu = min_input + (2*(np.arange(m)+1)-3)/2*(max_input - min_input)/(m-2)
+    sigma = 1/beta*(max_input - min_input)/(m-2)
     max_prob = norm.pdf(mu[0], mu[0], sigma)
 
     for j in range(len(data)):
         for i in range(m):
             responses[i] = norm.pdf(data[j], mu[i], sigma)
             spiking_time = n - 1 - np.argmax(np.histogram(responses[i],  np.linspace(0, max_prob, n + 1))[0])
-            if spiking_time < n - 1:
+            if spiking_time < n -  1:
                 spikes[j, spiking_time, i] = 1
 
     spikes = spikes.reshape([len(data) * n, m])
