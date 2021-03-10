@@ -168,7 +168,7 @@ def grf_spike(data, m, min_input, max_input):
     return spikes
 
 def one_hot_place_spike(data, m, min_input, max_input):
-    # Simple population coding algorithm that represents inputs by a location. 
+    # Simple population coding algorithm adapted from Stagsted et al. (2020) that represents inputs by a location. 
     # An input is assigned to the neuron that is closest to its value. 
     # Only one neuron fires at every timestep
 
@@ -199,7 +199,6 @@ def grf_spike_with_internal_timesteps(data, min_input, max_input, neurons=10, ti
     beta -- tuning parameter that determines the width of the receptive fields
     """
 
-    
     if np.isscalar(data):
         data = [data]
         
