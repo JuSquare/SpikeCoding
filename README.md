@@ -1,27 +1,29 @@
 # SpikeCoding
 
-This package features MATLAB, Python and ROS implementations of spike encoding and decoding algorithms. So far, the following algorithms are available for all supported platforms:
+This package features MATLAB, Python and ROS implementations of spike encoding and decoding algorithms. So far, the following algorithms are available:
 - Population coding:
-	- Gaussian Receptor Fields
+	- [Matlab][Python] Gaussian Receptor Fields
+	- [Matlab][Python] Bohté et al. (2002) GRF
 - Temporal coding:
-	- Temporal contrast
-	- Step-forward
-	- Moving window
+	- [Matlab][Python][ROS] Temporal contrast
+	- [Matlab][Python][ROS] Step-forward
+	- [Matlab][Python][ROS] Moving window
 - Rate coding: 
-	- Hough spike
-	- Threshold Hough
-	- Ben's spike
+	- [Matlab][Python] Hough spike
+	- [Matlab][Python] Threshold Hough
+	- [Matlab][Python] Ben's spike
 
-Supporting paper: https://arxiv.org/abs/2103.XXXX
+Supporting paper: https://arxiv.org/abs/2103.02751
 
 TODOs: 
 - Finish integration of rate coding to ROS node
+- Add Population schemes to ROS node
 - Implement the following schemes: non-linear GRF, ROC, Poisson, LPC.
 - Upload review table & add references on README
 - Generate tests for MNIST dataset
 - Generate tests for IMU data from the Obstacle Detection & Avoidance Dataset
 - Setup framework for parameters optimisation (DEAP, PyEvolve, PyBrain)
-- ...
+- Include to PySNN (?)
 
 ---
 
