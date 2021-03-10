@@ -318,7 +318,7 @@ box on;
 %     signal = input(j*10);
 %     for i = 1:m
 %        mu = min_input + (2*i-3)/2*(max_input - min_input)/(m-2);
-%        % BohtÃ© et al. 2002: 
+%        % Bohté et al. 2002: 
 %        % sigma = (m-2) / (beta * (max_input - min_input));
 %        % Modified version: 
 %        sigma = (max_input - min_input)/(m-2);
@@ -333,7 +333,7 @@ box on;
 % axis([min_input-3*sigma max_input+3*sigma 0 1]);
 
 
-%% Comparing GFR (Linear), GFR (Gaussian), and BohtÃ© et al. (2002)
+%% Comparing GFR (Linear), GFR (Gaussian), and Bohté et al. (2002)
 
 figure()
 
@@ -391,3 +391,64 @@ end
 hold off;
 box on;
 
+nb_neurons_BOHTE = 15;
+nb_timesteps_BOHTE = 10;
+beta_BOHTE = 1.5;
+[spikes_BOHTE_1,min_input,max_input] = BohteEncoding(S1,nb_neurons_BOHTE, nb_timesteps_BOHTE, beta_BOHTE);
+signal_BOHTE_1 = BohteDecoding(spikes_BOHTE_1,min_input,max_input);
+nb_neurons_BOHTE = 15;
+nb_timesteps_BOHTE = 10;
+beta_BOHTE = 1.5;
+[spikes_BOHTE_2,min_input,max_input] = BohteEncoding(S2,nb_neurons_BOHTE, nb_timesteps_BOHTE, beta_BOHTE);
+signal_BOHTE_2 = BohteDecoding(spikes_BOHTE_2,min_input,max_input);
+nb_neurons_BOHTE = 15;
+nb_timesteps_BOHTE = 10;
+beta_BOHTE = 1.5;
+[spikes_BOHTE_3,min_input,max_input] = BohteEncoding(S3,nb_neurons_BOHTE, nb_timesteps_BOHTE, beta_BOHTE);
+signal_BOHTE_3 = BohteDecoding(spikes_BOHTE_3,min_input,max_input);
+
+subplot(9,3,[3,6])
+hold on;
+plot(T,S1)
+plot(T,signal_BOHTE_1)
+hold off;
+title('Bohté et al. (2002) GRF');
+box on;
+subplot(9,3,9)
+hold  all;
+for  t = 1:length(T)
+    [~,neuron] = max(spikes_BOHTE_1(t,:));
+    plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
+end
+hold off;
+box on;
+
+subplot(9,3,[12,15])
+hold on;
+plot(T,S2)
+plot(T,signal_BOHTE_2)
+hold off;
+box on;
+subplot(9,3,18)
+hold  all;
+for  t = 1:length(T)
+    [~,neuron] = max(spikes_BOHTE_2(t,:));
+    plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
+end
+hold off;
+box on;
+
+subplot(9,3,[21,24])
+hold on;
+plot(T,S3)
+plot(T,signal_BOHTE_3)
+hold off;
+box on;
+subplot(9,3,27)
+hold  all;
+for  t = 1:length(T)
+    [~,neuron] = max(spikes_BOHTE_3(t,:));
+    plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
+end
+hold off;
+box on;

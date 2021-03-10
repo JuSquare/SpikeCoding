@@ -22,7 +22,7 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 %
-% @author Julien Dupeyroux
+% @author Julien Dupeyroux 
 
 %% Get some data
 
@@ -212,32 +212,34 @@ box on;
 subplot(3,1,3)
 hold  all;
 for  t = 1:length(T)
-    [~,neuron] = max(spikes_GFR(t,:));
+    [~,neuron] = max(spikes_GRF(t,:));
     plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
 end
-
+hold off;
+box on;
 
 subplot(3,2,[1,3])
 hold on;
 plot(T, signal_GRF', 'red')
 plot(T, S', 'blue')
 hold off;
-title('Gaussian Receptive Fields Algorithm GRF');
+title('Bohté et al. (2002) GRF');
 box on;
 subplot(3,2,5)
 hold  all;
 for  t = 1:length(T)
-    [~,neuron] = max(spikes_GFR(t,:));
+    [~,neuron] = max(spikes_GRF(t,:));
     plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
 end
-
+hold off;
+box on;
 
 subplot(3,2,[2,4])
 hold on;
 plot(T, signal_BOHTE', 'red')
 plot(T, S', 'blue')
 hold off;
-title('Gaussian Receptive Fields Algorithm GRF');
+title('Bohté et al. (2002) GRF');
 box on;
 subplot(3,2,6)
 hold  all;
@@ -245,8 +247,6 @@ for  t = 1:length(T)
     [~,neuron] = max(spikes_BOHTE(t,:));
     plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
 end
-
-
 hold off;
 box on;
 

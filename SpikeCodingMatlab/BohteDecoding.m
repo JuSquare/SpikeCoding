@@ -22,11 +22,11 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 %
-% @author Julien Dupeyroux
+% @author Stein Stroobants
 
 function signal = BohteDecoding(spikes, min_input, max_input)
     % Based on algorithm provided in:
-    %   Bohtï¿½ et al. (2002)
+    %   Bohté et al. (2002)
 
     shape = size(spikes);
     signal = zeros(shape(1), 1);

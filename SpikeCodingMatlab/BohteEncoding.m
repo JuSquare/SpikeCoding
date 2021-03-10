@@ -22,26 +22,22 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 %
-% @author Julien Dupeyroux
+% @author Stein Stroobants
 
 function [spikes, min_input, max_input] = BohteEncoding(input,m,timesteps, beta)
 
     % Based on algorithm provided in:
-    %   Bohtï¿½ et al. (2002)
-    
-    % TODO: add temporal coding (not sure about what he meant in his paper)
+    %   Bohté et al. (2002)
     
     L = length(input);
     
     spikes = zeros(L, timesteps, m);
     responses = zeros(m, 1);
-    
-    
+        
     min_input = min(input);
     max_input = max(input);
-    
-    
-    %     Calculation of mu and sigma of the Gaussian receptive fields
+        
+    % Calculation of mu and sigma of the Gaussian receptive fields
     mrange = 1:m;
     mu = min_input + (2*mrange-3)/2*(max_input - min_input)/(m-2);
     sigma = 1/beta*(max_input - min_input)/(m-2);
