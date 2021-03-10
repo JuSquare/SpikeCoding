@@ -275,8 +275,8 @@ median_efficiency = median(spike_efficiency)
 sd_efficiency = std(spike_efficiency)
 
 figure()
-plot(spike_efficiency)
-legend('TBR','MW','SF','BSA','HSA','T-HSA', 'GRF', 'BOHTE') 
+plot(spike_efficiency(:, 1:6))
+legend('TBR','MW','SF','BSA','HSA','T-HSA') 
 axis([1 nb_tests 0 100])
 
 % We also look at the root mean square error between the original signal
