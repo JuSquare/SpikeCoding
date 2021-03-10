@@ -24,38 +24,26 @@
 %
 % @author Julien Dupeyroux
 
-function [spikes, min_input, max_input] = BohteEncoding(input,m,timesteps, beta)
-
+function signal = BohteDecoding(spikes, min_input, max_input)
     % Based on algorithm provided in:
     %   Boht� et al. (2002)
+
+    shape = size(spikes);
+    signal = zeros(shape(1), 1);
+    mu = zeros(shape(3), 1);
+
+    for i = 1:shape(3)
+        mu(i) = min_input + (2*i-3)/2*(max_input - min_input)/(shape(3)-2);
+    end
     
-    % TODO: add temporal coding (not sure about what he meant in his paper)
-    
-    L = length(input);
-    
-    spikes = zeros(L, timesteps, m);
-    responses = zeros(m, 1);
-    
-    
-    min_input = min(input);
-    max_input = max(input);
-    
-    
-    %     Calculation of mu and sigma of the Gaussian receptive fields
-    mrange = 1:m;
-    mu = min_input + (2*mrange-3)/2*(max_input - min_input)/(m-2);
-    sigma = 1/beta*(max_input - min_input)/(m-2);
-    max_prob = normpdf(mu(1), mu(1), sigma);
-    size_change = max_prob / (2 * timesteps);
-    
-    for j = 1:L
-        for i = 1:m
-            responses(i) = normpdf(input(j), mu(i), sigma);
-            spike = round(((responses(i) + size_change) / (max_prob + 2 * size_change) * (timesteps + 1)) - 0.0001);
-            spikeTime = timesteps - spike + 1;
-            if spikeTime < timesteps - 1
-                spikes(j, spikeTime, i) = 1;
+    for i = 1:shape(1)
+        spike_times = zeros(shape(3), 1);
+        for j = 1:shape(2)
+            for spike_idx = find(spikes(i, j, :) > 0)
+                spike_times(spike_idx) = shape(2) - j;
             end
         end
+        weight_center  = sum(mu.*spike_times)/sum(spike_times);
+        signal(i) = weight_center;
     end
 end

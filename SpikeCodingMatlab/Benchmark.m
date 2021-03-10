@@ -73,12 +73,18 @@ fir_HSAm = triang(15)';
 threshold_HSAm = 0.85;
 signal_HSAm = zeros(nb_tests, length(T));
 
-% Gaussian receptive rields params
+% Gaussian receptive fields params
 nb_neurons_GRF = 20;
 signal_GRF = zeros(nb_tests, length(T));
 
+% Bohte params
+nb_neurons_BOHTE = 15;
+nb_timesteps_BOHTE = 10;
+beta_BOHTE = 1.5;
+signal_BOHTE = zeros(nb_tests, length(T));
+
 % Spike counting for each of the methods (temporal, rate)
-spike_count = zeros(nb_tests, 6);
+spike_count = zeros(nb_tests, 8);
 
 for i = 1:nb_tests
     % Define the signal
@@ -115,8 +121,14 @@ for i = 1:nb_tests
     spike_count(i,6) = sum(spikes_HSAm);
     
     % Gaussian field (population coding)
-    [spikes_GFR,min_input,max_input] = GaussianReceptFieldsEncoding(S(i,:),nb_neurons_GRF);
-    signal_GRF(i,:) = GaussianReceptFieldsDecoding(spikes_GFR,min_input,max_input);
+    [spikes_GRF,min_input,max_input] = GaussianReceptFieldsEncoding(S(i,:),nb_neurons_GRF);
+    signal_GRF(i,:) = GaussianReceptFieldsDecoding(spikes_GRF,min_input,max_input);
+    spike_count(i,7) = sum(spikes_GRF, 'all');
+    
+    % Bohte spike (temporal gaussian field coding)
+    [spikes_BOHTE,min_input,max_input] = BohteEncoding(S(i,:),nb_neurons_BOHTE, nb_timesteps_BOHTE, beta_BOHTE);
+    signal_BOHTE(i,:) = BohteDecoding(spikes_BOHTE,min_input,max_input);
+    spike_count(i,8) = sum(spikes_BOHTE, 'all');
 end
 
 %% Plot results
@@ -203,6 +215,38 @@ for  t = 1:length(T)
     [~,neuron] = max(spikes_GFR(t,:));
     plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
 end
+
+
+subplot(3,2,[1,3])
+hold on;
+plot(T, signal_GRF', 'red')
+plot(T, S', 'blue')
+hold off;
+title('Gaussian Receptive Fields Algorithm GRF');
+box on;
+subplot(3,2,5)
+hold  all;
+for  t = 1:length(T)
+    [~,neuron] = max(spikes_GFR(t,:));
+    plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
+end
+
+
+subplot(3,2,[2,4])
+hold on;
+plot(T, signal_BOHTE', 'red')
+plot(T, S', 'blue')
+hold off;
+title('Gaussian Receptive Fields Algorithm GRF');
+box on;
+subplot(3,2,6)
+hold  all;
+for  t = 1:length(T)
+    [~,neuron] = max(spikes_BOHTE(t,:));
+    plot([T(t) T(t)], [neuron-0.35 neuron+0.35], 'black', 'linewidth', 1.1);
+end
+
+
 hold off;
 box on;
 
@@ -216,7 +260,12 @@ box on;
 %       spike efficiency = ( 1 - ------------- ) x 100
 %                                  length(T)
 
+
+% note that this is not correct for the Bohte GRF, since this has a higher 
+% amount of timesteps, and multiple neurons can fire at the same time.
 spike_efficiency = (1 - spike_count/length(T))*100;
+
+
 % boxplot(spike_efficiency, ...
 %     'Labels', {'TBR', 'MW', 'SF', 'BSA', 'HSA', 'T-HSA'}, ...
 %     'Symbol', 'bo')
@@ -227,7 +276,7 @@ sd_efficiency = std(spike_efficiency)
 
 figure()
 plot(spike_efficiency)
-legend('TBR','MW','SF','BSA','HSA','T-HSA')
+legend('TBR','MW','SF','BSA','HSA','T-HSA', 'GRF', 'BOHTE') 
 axis([1 nb_tests 0 100])
 
 % We also look at the root mean square error between the original signal
@@ -241,6 +290,8 @@ for i = 1:nb_tests
     rmse(i,4) = RMSE(S(i,:), signal_BSA(i,:));
     rmse(i,5) = RMSE(S(i,:), signal_HSA(i,:));
     rmse(i,6) = RMSE(S(i,:), signal_HSAm(i,:));
+    rmse(i,7) = RMSE(S(i,:), signal_GRF(i,:));
+    rmse(i,8) = RMSE(S(i,:), signal_BOHTE(i,:));
 end
 
 means_rmse = mean(rmse)
@@ -249,8 +300,8 @@ sd_rmse = std(rmse)
 
 figure()
 plot(rmse)
-legend('TBR','MW','SF','BSA','HSA','T-HSA')
-axis([1 nb_tests 0 25])
+legend('TBR','MW','SF','BSA','HSA','T-HSA', 'GRF', 'BOHTE')
+axis([1 nb_tests 0 2])
 
 %% Results
 
