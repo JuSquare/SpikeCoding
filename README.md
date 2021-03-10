@@ -2,7 +2,7 @@
 
 This package features MATLAB, Python and ROS implementations of spike encoding and decoding algorithms. So far, the following algorithms are available:
 - Population coding:
-	- [Matlab][Python] Gaussian Receptor Fields
+	- [Matlab][Python][ROS] Gaussian Receptor Fields
 	- [Matlab][Python] Bohté et al. (2002) GRF
 - Temporal coding:
 	- [Matlab][Python][ROS] Temporal contrast

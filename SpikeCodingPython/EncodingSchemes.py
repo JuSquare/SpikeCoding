@@ -24,7 +24,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-# @author Julien Dupeyroux
+# @author Julien Dupeyroux, Stein Stroobants
 
 import numpy as np
 from scipy.stats import norm
