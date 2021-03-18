@@ -111,7 +111,12 @@ List of the available launch files:
 
 ## Application to images encoding
 
-[To be completed]
+TODO: 
+- add other methods
+- generate videos
+- plot error between original and reconstruction
+- include in ROS
+- test on MNIST
 
 Based on video available in the ODA Dataset: https://github.com/JuSquare/ODA_Dataset/tree/master/dataset
 
