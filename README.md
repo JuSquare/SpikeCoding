@@ -108,3 +108,22 @@ List of the available launch files:
 - `encode_threshold_hough.launch`
 - `encode_bsa.launch`
 - `encode_gaussian_fields.launch`
+
+## Application to images encoding
+
+[To be completed]
+
+Based on video available in the ODA Dataset: https://github.com/JuSquare/ODA_Dataset/tree/master/dataset
+
+Step Forward (SF) Temporal Coding with Threshold = 1 <br/>
+![](SpikeCodingMatlab/image_sf_threshold_1.png)
+
+
+Step Forward (SF) Temporal Coding with Threshold = 5 <br/>
+![](SpikeCodingMatlab/image_sf_threshold_5.png)
+
+Step Forward (SF) Temporal Coding with Threshold = 10 <br/>
+![](SpikeCodingMatlab/image_sf_threshold_10.png)
+
+Step Forward (SF) Temporal Coding with Threshold = 20 <br/>
+![](SpikeCodingMatlab/image_sf_threshold_20.png)
